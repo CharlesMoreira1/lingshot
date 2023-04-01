@@ -1,4 +1,4 @@
-package com.teachmeprint.language.feature.screenshot.presentation
+package com.teachmeprint.language.feature.screenshot.presentation.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -6,7 +6,7 @@ import android.graphics.*
 import android.view.MotionEvent
 import android.view.View
 
-class FloatingView(context: Context) : View(context) {
+class CropRectangleView(context: Context) : View(context) {
 
     private var mPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var mRect: Rect = Rect()
@@ -57,9 +57,6 @@ class FloatingView(context: Context) : View(context) {
         return false
     }
 
-    fun clearDrawing() {
-        invalidate()
-    }
     fun getRectCrop(): Rect {
         return mRect
     }

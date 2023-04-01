@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Rect
 import android.hardware.display.DisplayManager
 import android.hardware.display.VirtualDisplay
@@ -17,7 +16,6 @@ import android.os.Environment
 import com.teachmeprint.language.core.util.NavigationIntentUtil
 import java.io.File
 import java.io.FileOutputStream
-import java.lang.Math.min
 import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
 import java.util.*
@@ -28,8 +26,8 @@ class ScreenCaptureManager @Inject constructor(
     private val notificationClearScreenshot: NotificationClearScreenshot
 ) {
 
-   private val mediaProjectionManager: MediaProjectionManager =
-       context.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+    private val mediaProjectionManager: MediaProjectionManager =
+        context.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
 
     private var mediaProjection: MediaProjection? = null
     private var virtualDisplay: VirtualDisplay? = null
@@ -83,8 +81,10 @@ class ScreenCaptureManager @Inject constructor(
         val croppedBitmap = Bitmap.createBitmap(
             cropWidth, cropHeight, Bitmap.Config.ARGB_8888
         )
+
         val croppedBuffer = ByteBuffer.allocate(cropWidth * cropHeight * 4)
         buffer.position(cropOffsetY + cropOffsetX)
+
         for (y in 0 until cropHeight) {
             for (x in 0 until cropWidth) {
                 val pixel = buffer.int
@@ -92,9 +92,9 @@ class ScreenCaptureManager @Inject constructor(
             }
             buffer.position(buffer.position() + rowPadding)
         }
+
         croppedBuffer.rewind()
         croppedBitmap.copyPixelsFromBuffer(croppedBuffer)
-
         return croppedBitmap
     }
 

@@ -15,7 +15,6 @@ import android.widget.ImageButton
 import androidx.core.view.isVisible
 import com.teachmeprint.language.R
 import com.teachmeprint.language.core.util.isViewOverlapping
-import com.teachmeprint.language.feature.screenshot.presentation.FloatingView
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
@@ -32,13 +31,13 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
         LayoutInflater.from(context).inflate(R.layout.floating_close_window_layout, null)
     }
 
-    private val rootViesssssswFloatingClose by lazy {
-        FloatingView(context)
+    private val rootFloatingCropRectangle by lazy {
+        CropRectangleView(context)
     }
 
     private lateinit var windowParamsFloating: WindowManager.LayoutParams
     private lateinit var windowParamsFloatingClose: WindowManager.LayoutParams
-    private lateinit var aaaaaaaWindow: WindowManager.LayoutParams
+    private lateinit var windowParamsCropRectangle: WindowManager.LayoutParams
 
     private var initialX = 0
     private var initialY = 0
@@ -50,6 +49,7 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
     }
 
     init {
+        setupWindowParamsFloatingCropRectangle()
         setupWindowParamsFloating()
         setupWindowParamsFloatingClose()
     }
@@ -65,10 +65,9 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
                 coroutineScope.launch {
                     delay(100L)
                     withContext(Dispatchers.IO) {
-                        onScreenShot.invoke(rootViesssssswFloatingClose.getRectCrop())
+                        onScreenShot.invoke(rootFloatingCropRectangle.getRectCrop())
                     }
                     showOrHide()
-                    rootViesssssswFloatingClose.clearDrawing()
                 }
             }
             onTouchMoveFloatingButton(onStopService)
@@ -118,8 +117,8 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
         setLocation(x * 1.0f, y * 1.0f)
     }
 
-    private fun setupWindowParamsFloating() {
-        aaaaaaaWindow = WindowManager.LayoutParams(
+    private fun setupWindowParamsFloatingCropRectangle() {
+        windowParamsCropRectangle = WindowManager.LayoutParams(
             WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT,
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
@@ -131,7 +130,9 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
         ).apply {
             gravity = Gravity.CENTER
         }
+    }
 
+    private fun setupWindowParamsFloating() {
         windowParamsFloating = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT,
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -175,19 +176,18 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
 
     fun showOrHide(isVisible: Boolean = true) {
         rootViewFloating.isVisible = isVisible
-        rootViesssssswFloatingClose.isVisible = isVisible
+        rootFloatingCropRectangle.isVisible = isVisible
     }
 
     fun start() = runCatching {
-        windowManager.addView(rootViesssssswFloatingClose, aaaaaaaWindow)
+        windowManager.addView(rootFloatingCropRectangle, windowParamsCropRectangle)
         windowManager.addView(rootViewFloating, windowParamsFloating)
         windowManager.addView(rootViewFloatingClose, windowParamsFloatingClose)
-
     }.getOrNull()
 
     fun close() = runCatching {
+        windowManager.removeView(rootFloatingCropRectangle)
         windowManager.removeView(rootViewFloating)
         windowManager.removeView(rootViewFloatingClose)
-        windowManager.removeView(rootViesssssswFloatingClose)
     }.getOrNull()
 }
