@@ -70,16 +70,21 @@ class ScreenCaptureManager @Inject constructor(
         val buffer = planes[0].buffer
         val pixelStride = planes[0].pixelStride
         val rowStride = planes[0].rowStride
+
         val cropWidth = cropRect.width()
         val cropHeight = cropRect.height()
+
         val cropOffsetX = cropRect.left * pixelStride
         val cropOffsetY = cropRect.top * rowStride
         val rowPadding = rowStride - cropWidth * pixelStride
+
         val croppedBitmap = Bitmap.createBitmap(
             cropWidth, cropHeight, Bitmap.Config.ARGB_8888
         )
+
         val croppedBuffer = ByteBuffer.allocate(cropWidth * cropHeight * 4)
         buffer.position(cropOffsetY + cropOffsetX)
+
         for (y in 0 until cropHeight) {
             for (x in 0 until cropWidth) {
                 val pixel = buffer.int
@@ -87,6 +92,7 @@ class ScreenCaptureManager @Inject constructor(
             }
             buffer.position(buffer.position() + rowPadding)
         }
+
         croppedBuffer.rewind()
         croppedBitmap.copyPixelsFromBuffer(croppedBuffer)
         return croppedBitmap
