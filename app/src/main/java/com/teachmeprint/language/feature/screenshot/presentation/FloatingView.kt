@@ -1,57 +1,66 @@
 package com.teachmeprint.language.feature.screenshot.presentation
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
-import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import android.view.WindowManager
-import java.lang.Math.max
-import java.lang.Math.min
 
 class FloatingView(context: Context) : View(context) {
 
-    private var rectF = RectF()
-    private var paint = Paint().apply {
-        isAntiAlias = true
-        color = Color.BLACK
-        style = Paint.Style.STROKE
-        strokeWidth = 5f
+    private var mPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var mRect: Rect = Rect()
+
+    private var mStartX = 0f
+    private var mStartY = 0f
+    private var mEndX = 0f
+    private var mEndY = 0f
+
+    init {
+        mPaint.color = Color.RED
+        mPaint.style = Paint.Style.STROKE
+        mPaint.strokeWidth = 5f
     }
 
-    private var startTouchX: Float = 0f
-    private var startTouchY: Float = 0f
-    private var endTouchX: Float = 0f
-    private var endTouchY: Float = 0f
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        canvas.drawRect(mRect, mPaint)
+    }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        when (event?.action) {
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                startTouchX = event.x
-                startTouchY = event.y
-                return true
+                mStartX = event.x
+                mStartY = event.y
+                mEndX = mStartX
+                mEndY = mStartY
+                mRect.set(
+                    mStartX.toInt(),
+                    mStartY.toInt(),
+                    mEndX.toInt(),
+                    mEndY.toInt()
+                )
             }
             MotionEvent.ACTION_MOVE -> {
-                endTouchX = event.x
-                endTouchY = event.y
+                mEndX = event.x
+                mEndY = event.y
+                mRect.set(
+                    mStartX.coerceAtMost(mEndX).toInt(),
+                    mStartY.coerceAtMost(mEndY).toInt(),
+                    mStartX.coerceAtLeast(mEndX).toInt(),
+                    mStartY.coerceAtLeast(mEndY).toInt()
+                )
                 invalidate()
-                return true
             }
         }
-        return super.onTouchEvent(event)
+        return false
     }
 
-    override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
-        rectF.set(startTouchX, startTouchY, endTouchX, endTouchY)
-        canvas?.drawRect(rectF, paint)
+    fun clearDrawing() {
+        invalidate()
     }
-
     fun getRectCrop(): Rect {
-        val left = min(startTouchX, endTouchX).toInt()
-        val top = min(startTouchY, endTouchY).toInt()
-        val right = max(startTouchX, endTouchX).toInt()
-        val bottom = max(startTouchY, endTouchY).toInt()
-        return Rect(left, top, right, bottom)
+        return mRect
     }
 }

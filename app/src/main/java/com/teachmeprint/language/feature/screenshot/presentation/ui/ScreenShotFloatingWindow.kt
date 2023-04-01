@@ -68,6 +68,7 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
                         onScreenShot.invoke(rootViesssssswFloatingClose.getRectCrop())
                     }
                     showOrHide()
+                    rootViesssssswFloatingClose.clearDrawing()
                 }
             }
             onTouchMoveFloatingButton(onStopService)
@@ -128,9 +129,7 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
             PixelFormat.TRANSLUCENT
         ).apply {
-            gravity = Gravity.TOP or Gravity.START
-            x = 0
-            y = 0
+            gravity = Gravity.CENTER
         }
 
         windowParamsFloating = WindowManager.LayoutParams(
@@ -176,6 +175,7 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
 
     fun showOrHide(isVisible: Boolean = true) {
         rootViewFloating.isVisible = isVisible
+        rootViesssssswFloatingClose.isVisible = isVisible
     }
 
     fun start() = runCatching {
@@ -188,5 +188,6 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
     fun close() = runCatching {
         windowManager.removeView(rootViewFloating)
         windowManager.removeView(rootViewFloatingClose)
+        windowManager.removeView(rootViesssssswFloatingClose)
     }.getOrNull()
 }

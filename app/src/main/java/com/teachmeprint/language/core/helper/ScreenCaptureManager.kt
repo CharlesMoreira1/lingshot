@@ -66,22 +66,7 @@ class ScreenCaptureManager @Inject constructor(
         saveBitmap(bitmap)
         return bitmap
     }
-    private fun cropBitmap(bitmap: Bitmap?): Bitmap? {
-        if (bitmap == null) return null
-        val width = bitmap.width
-        val height = bitmap.height
-        val size = min(width, height) / 2
-        val left = (width - size) / 2
-        val top = (height - size) / 2
-        val right = left + size
-        val bottom = top + size
-        val croppedBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(croppedBitmap)
-        val srcRect = Rect(left, top, right, bottom)
-        val dstRect = Rect(0, 0, size, size)
-        canvas.drawBitmap(bitmap, srcRect, dstRect, null)
-        return croppedBitmap
-    }
+
     private fun imageToBitmap(image: Image, cropRect: Rect): Bitmap? {
         val planes = image.planes
         val buffer = planes[0].buffer
@@ -91,17 +76,13 @@ class ScreenCaptureManager @Inject constructor(
         val cropWidth = cropRect.width()
         val cropHeight = cropRect.height()
 
-        // Calcula o deslocamento e o preenchimento da linha para a área do recorte
         val cropOffsetX = cropRect.left * pixelStride
         val cropOffsetY = cropRect.top * rowStride
         val rowPadding = rowStride - cropWidth * pixelStride
 
-        // Cria um novo bitmap somente com a área do recorte
         val croppedBitmap = Bitmap.createBitmap(
             cropWidth, cropHeight, Bitmap.Config.ARGB_8888
         )
-
-        // Copia os pixels da área do recorte do buffer para o novo bitmap
         val croppedBuffer = ByteBuffer.allocate(cropWidth * cropHeight * 4)
         buffer.position(cropOffsetY + cropOffsetX)
         for (y in 0 until cropHeight) {
