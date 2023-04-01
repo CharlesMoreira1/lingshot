@@ -4,6 +4,7 @@ package com.teachmeprint.language.feature.screenshot.presentation.ui
 
 import android.content.Context
 import android.graphics.PixelFormat
+import android.graphics.Rect
 import android.os.Build
 import android.util.DisplayMetrics
 import android.view.Gravity
@@ -14,6 +15,7 @@ import android.widget.ImageButton
 import androidx.core.view.isVisible
 import com.teachmeprint.language.R
 import com.teachmeprint.language.core.util.isViewOverlapping
+import com.teachmeprint.language.feature.screenshot.presentation.FloatingView
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
@@ -30,8 +32,13 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
         LayoutInflater.from(context).inflate(R.layout.floating_close_window_layout, null)
     }
 
+    private val rootViesssssswFloatingClose by lazy {
+        FloatingView(context)
+    }
+
     private lateinit var windowParamsFloating: WindowManager.LayoutParams
     private lateinit var windowParamsFloatingClose: WindowManager.LayoutParams
+    private lateinit var aaaaaaaWindow: WindowManager.LayoutParams
 
     private var initialX = 0
     private var initialY = 0
@@ -49,7 +56,7 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
 
     fun onFloating(
         coroutineScope: CoroutineScope,
-        onScreenShot: () -> Unit,
+        onScreenShot: (Rect) -> Unit,
         onStopService: () -> Unit
     ) {
         with(imageButtonScreenShotFloating) {
@@ -58,7 +65,7 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
                 coroutineScope.launch {
                     delay(100L)
                     withContext(Dispatchers.IO) {
-                        onScreenShot.invoke()
+                        onScreenShot.invoke(rootViesssssswFloatingClose.getRectCrop())
                     }
                     showOrHide()
                 }
@@ -111,6 +118,21 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
     }
 
     private fun setupWindowParamsFloating() {
+        aaaaaaaWindow = WindowManager.LayoutParams(
+            WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+            } else {
+                WindowManager.LayoutParams.TYPE_PHONE
+            },
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+            PixelFormat.TRANSLUCENT
+        ).apply {
+            gravity = Gravity.TOP or Gravity.START
+            x = 0
+            y = 0
+        }
+
         windowParamsFloating = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT,
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -157,8 +179,10 @@ class ScreenShotFloatingWindow @Inject constructor(private val context: Context)
     }
 
     fun start() = runCatching {
+        windowManager.addView(rootViesssssswFloatingClose, aaaaaaaWindow)
         windowManager.addView(rootViewFloating, windowParamsFloating)
         windowManager.addView(rootViewFloatingClose, windowParamsFloatingClose)
+
     }.getOrNull()
 
     fun close() = runCatching {

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Rect
 import android.hardware.display.DisplayManager
 import android.hardware.display.VirtualDisplay
 import android.media.Image
@@ -15,6 +17,8 @@ import android.os.Environment
 import com.teachmeprint.language.core.util.NavigationIntentUtil
 import java.io.File
 import java.io.FileOutputStream
+import java.lang.Math.min
+import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -55,27 +59,62 @@ class ScreenCaptureManager @Inject constructor(
         mediaProjection = null
     }
 
-    fun captureScreenshot(): Bitmap? {
+    fun captureScreenshot(rect: Rect): Bitmap? {
         val image: Image? = imageReader?.acquireLatestImage()
-        val bitmap: Bitmap? = image?.let { imageToBitmap(it) }
+        val bitmap: Bitmap? = image?.let { imageToBitmap(it, rect) }
         image?.close()
         saveBitmap(bitmap)
         return bitmap
     }
-
-    private fun imageToBitmap(image: Image): Bitmap? {
+    private fun cropBitmap(bitmap: Bitmap?): Bitmap? {
+        if (bitmap == null) return null
+        val width = bitmap.width
+        val height = bitmap.height
+        val size = min(width, height) / 2
+        val left = (width - size) / 2
+        val top = (height - size) / 2
+        val right = left + size
+        val bottom = top + size
+        val croppedBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(croppedBitmap)
+        val srcRect = Rect(left, top, right, bottom)
+        val dstRect = Rect(0, 0, size, size)
+        canvas.drawBitmap(bitmap, srcRect, dstRect, null)
+        return croppedBitmap
+    }
+    private fun imageToBitmap(image: Image, cropRect: Rect): Bitmap? {
         val planes = image.planes
         val buffer = planes[0].buffer
         val pixelStride = planes[0].pixelStride
         val rowStride = planes[0].rowStride
-        val rowPadding = rowStride - pixelStride * displayMetrics.widthPixels
 
-        val bitmap = Bitmap.createBitmap(
-            displayMetrics.widthPixels + rowPadding / pixelStride,
-            displayMetrics.heightPixels, Bitmap.Config.ARGB_8888
+        val cropWidth = cropRect.width()
+        val cropHeight = cropRect.height()
+
+        // Calcula o deslocamento e o preenchimento da linha para a área do recorte
+        val cropOffsetX = cropRect.left * pixelStride
+        val cropOffsetY = cropRect.top * rowStride
+        val rowPadding = rowStride - cropWidth * pixelStride
+
+        // Cria um novo bitmap somente com a área do recorte
+        val croppedBitmap = Bitmap.createBitmap(
+            cropWidth, cropHeight, Bitmap.Config.ARGB_8888
         )
-        bitmap.copyPixelsFromBuffer(buffer)
-        return bitmap
+
+        // Copia os pixels da área do recorte do buffer para o novo bitmap
+        val croppedBuffer = ByteBuffer.allocate(cropWidth * cropHeight * 4)
+        buffer.position(cropOffsetY + cropOffsetX)
+        for (y in 0 until cropHeight) {
+            for (x in 0 until cropWidth) {
+                val pixel = buffer.int
+                croppedBuffer.putInt(pixel)
+            }
+            buffer.position(buffer.position() + rowPadding)
+        }
+        croppedBuffer.rewind()
+        croppedBitmap.copyPixelsFromBuffer(croppedBuffer)
+
+        return croppedBitmap
     }
 
     private fun saveBitmap(bitmap: Bitmap?) {

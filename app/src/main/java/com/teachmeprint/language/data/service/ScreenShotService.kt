@@ -48,7 +48,7 @@ class ScreenShotService: LifecycleService(), ScreenShotDetection.ScreenshotDetec
         screenshotDetection.startScreenshotDetection()
         screenShotFloatingWindow.onFloating(lifecycleScope,
             onScreenShot = {
-                screenCaptureManager.captureScreenshot()
+                screenCaptureManager.captureScreenshot(it)
             },
             onStopService = {
                 stopSelf()
