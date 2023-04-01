@@ -70,10 +70,8 @@ class ScreenCaptureManager @Inject constructor(
         val buffer = planes[0].buffer
         val pixelStride = planes[0].pixelStride
         val rowStride = planes[0].rowStride
-
         val cropWidth = cropRect.width()
         val cropHeight = cropRect.height()
-
         val cropOffsetX = cropRect.left * pixelStride
         val cropOffsetY = cropRect.top * rowStride
         val rowPadding = rowStride - cropWidth * pixelStride
