@@ -57,7 +57,7 @@ jobs:
       - name: Dependency analysis report
         run: |
           if [ -f build/reports/dependency-analysis/build-health-report.txt ]; then
-            cat build/reports/dependency-analysis/build-health-report.txt || 42
+            cat build/reports/dependency-analysis/build-health-report.txt || exit 42
           fi
 
   danger:
