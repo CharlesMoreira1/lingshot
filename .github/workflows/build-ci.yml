@@ -55,11 +55,10 @@ jobs:
         run: ./gradlew buildHealth
 
       - name: Dependency analysis report
+        if: exists('build/reports/dependency-analysis/build-health-report.txt')
         run: |
-          if [ -f build/reports/dependency-analysis/build-health-report2.txt ]; then
-            cat build/reports/dependency-analysis/build-health-report.txt
-            exit 1
-          fi
+          cat build/reports/dependency-analysis/build-health-report.txt
+          exit 1
 
   danger:
     runs-on: ubuntu-latest
