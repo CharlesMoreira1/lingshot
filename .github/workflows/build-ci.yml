@@ -55,9 +55,13 @@ jobs:
         run: ./gradlew buildHealth
 
       - name: Dependency analysis report
-        run:
-         cat build/reports/dependency-analysis/build-health-report.txt
-         exit 1
+        run: |
+          if [ -f build/reports/dependency-analysis/build-health-repor2t.txt ]; then
+            cat build/reports/dependency-analysis/build-health-report.txt
+            exit 1
+          else
+            exit 0
+          fi
 
   danger:
     runs-on: ubuntu-latest
