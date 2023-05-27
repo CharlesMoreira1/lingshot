@@ -12,8 +12,13 @@ Dir["**/reports/detekt/detekt.xml"].each do |file_name|
   kotlin_detekt.detekt(inline_mode: true)
 end
 
-txt_file_path = 'build/reports/dependency-analysis/build-health-report.txt'
-txt_file_content = File.read(txt_file_path)
+text_files = Dir.glob("build/reports/dependency-analysis/build-health-report.txt")
 
-message "Conteúdo do arquivo baixado:"
-markdown "```\n#{txt_file_content}\n```"
+if text_files.empty?
+  warn("Nenhum arquivo de texto encontrado.")
+else
+  text_files.each do |file|
+    markdown("Arquivo de texto encontrado: #{file}")
+    # Faça qualquer outra ação necessária com o arquivo
+  end
+end
