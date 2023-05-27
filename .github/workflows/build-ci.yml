@@ -44,12 +44,6 @@ jobs:
           name: Artifact detekt
           path: '**/reports/detekt/'
 
-      - name: Dependency rules report
-        run: ./gradlew buildHealth
-
-      - name: Dependency analysis report
-        run: cat build/reports/dependency-analysis/build-health-report.txt
-
   dependency-analysis:
     runs-on: ubuntu-latest
 
@@ -60,13 +54,8 @@ jobs:
       - name: Detect unused and misused dependencies
         run: ./gradlew buildHealth
 
-      - name: Upload dependency analysis
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: dependency-analysis
-          path: build/reports/dependency-analysis/build-health-report.txt
-          if-no-files-found: ignore
+      - name: Dependency analysis report
+        run: cat build/reports/dependency-analysis/build-health-report.txt || exit 42
 
   danger:
     runs-on: ubuntu-latest
