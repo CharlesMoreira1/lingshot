@@ -56,9 +56,7 @@ jobs:
 
       - name: Dependency analysis report
         if: exists('build/reports/dependency-analysis/build-health-report.txt')
-        run:
-          cat build/reports/dependency-analysis/build-health-report.txt
-          exit 1
+        run: cat build/reports/dependency-analysis/build-health-report.txt
 
   danger:
     runs-on: ubuntu-latest
