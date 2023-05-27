@@ -12,13 +12,6 @@ Dir["**/reports/detekt/detekt.xml"].each do |file_name|
   kotlin_detekt.detekt(inline_mode: true)
 end
 
-text_files = Dir.glob("build/reports/dependency-analysis/build-health-report.txt")
-
-if text_files.empty?
-  warn("Nenhum arquivo de texto encontrado.")
-else
-  text_files.each do |file|
-    markdown("Arquivo de texto encontrado: #{file}")
-    # Faça qualquer outra ação necessária com o arquivo
-  end
+Dir["build/reports/dependency-analysis/build-health-report.txt"].each do |file_name|
+  markdown("Arquivo de texto encontrado: #{file_name}")
 end
