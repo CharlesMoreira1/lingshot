@@ -53,7 +53,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Artifact dependency updates
-          path: '**/dependencyUpdates/'
+          path: '**/dependencyUpdates/report.txt'
 
 
   danger:
@@ -87,7 +87,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: Artifact dependency updates
-          path: '**/dependencyUpdates/'
+          path: '**/dependencyUpdates/report.txt'
 
       - name: Install bundler gems
         run: gem install bundler
