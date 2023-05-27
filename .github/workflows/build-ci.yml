@@ -16,6 +16,23 @@ jobs:
       - name: Build the app
         run: ./gradlew clean build
 
+  dependency-analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup checkout
+        uses: actions/checkout@v3
+
+      - name: Detect unused and misused dependencies
+        run: ./gradlew buildHealth
+
+      - name: Dependency analysis report
+        run: |
+          if [ -f build/reports/dependency-analysis/build-health-report.txt ]; then
+            cat build/reports/dependency-analysis/build-health-report.txt
+            exit 1
+          fi
+
   quality:
     runs-on: ubuntu-latest
 
