@@ -53,7 +53,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Artifact dependency analysis
-          path: 'build/reports/dependency-analysis/build-health-report.txt'
+          path: '**/build/reports/dependency-analysis/'
 
   danger:
     runs-on: ubuntu-latest
@@ -86,7 +86,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: Artifact dependency analysis
-          path: 'build/reports/dependency-analysis/build-health-report.txt'
+          path: '**/build/reports/dependency-analysis/'
 
       - name: Install bundler gems
         run: gem install bundler
