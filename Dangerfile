@@ -13,5 +13,6 @@ Dir["**/reports/detekt/detekt.xml"].each do |file_name|
 end
 
 Dir["build/reports/dependency-analysis/build-health-report.txt"].each do |file_name|
-  markdown("Arquivo de texto encontrado: #{file_name}")
+  file_content = File.read(file_name)
+  markdown("Detect unused and misused dependencies: #{file_content}")
 end
