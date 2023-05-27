@@ -11,3 +11,9 @@ Dir["**/reports/detekt/detekt.xml"].each do |file_name|
   kotlin_detekt.report_file = file_name
   kotlin_detekt.detekt(inline_mode: true)
 end
+
+txt_file_path = 'build/reports/dependency-analysis/build-health-report.txt'
+txt_file_content = File.read(txt_file_path)
+
+message "Conteúdo do arquivo baixado:"
+markdown "```\n#{txt_file_content}\n```"
