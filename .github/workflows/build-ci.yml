@@ -44,6 +44,18 @@ jobs:
           name: Artifact detekt
           path: '**/reports/detekt/'
 
+      - name: Detect unused and misused dependencies
+        if: always()
+        run: ./gradlew buildHealth
+
+      - name: Upload dependency updates
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: Artifact dependency updates
+          path: '**/dependencyUpdates/'
+
+
   danger:
     runs-on: ubuntu-latest
 
@@ -70,6 +82,12 @@ jobs:
         with:
           name: Artifact detekt
           path: '**/reports/detekt/'
+
+      - name: Download dependency updates
+        uses: actions/download-artifact@v3
+        with:
+          name: Artifact dependency updates
+          path: '**/dependencyUpdates/'
 
       - name: Install bundler gems
         run: gem install bundler
