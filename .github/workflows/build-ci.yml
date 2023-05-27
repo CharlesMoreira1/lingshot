@@ -48,13 +48,12 @@ jobs:
         if: always()
         run: ./gradlew buildHealth
 
-      - name: Upload dependency updates
+      - name: Upload dependency analysis
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: Artifact dependency updates
-          path: '**/dependencyUpdates/report.txt'
-
+          name: Artifact dependency analysis
+          path: 'build/reports/dependency-analysis/build-health-report.txt'
 
   danger:
     runs-on: ubuntu-latest
@@ -83,11 +82,11 @@ jobs:
           name: Artifact detekt
           path: '**/reports/detekt/'
 
-      - name: Download dependency updates
+      - name: Download dependency analysis
         uses: actions/download-artifact@v3
         with:
-          name: Artifact dependency updates
-          path: '**/dependencyUpdates/report.txt'
+          name: Artifact dependency analysis
+          path: 'build/reports/dependency-analysis/build-health-report.txt'
 
       - name: Install bundler gems
         run: gem install bundler
