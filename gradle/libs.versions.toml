@@ -42,7 +42,7 @@ lottie = "6.0.0"
 jUnit = "4.13.2"
 
 ktlint = "11.4.0"
-detekt = "1.22.0"
+detekt = "1.23.0"
 composeDetekt = "0.0.26"
 
 [libraries]
