@@ -31,7 +31,7 @@ jobs:
           echo "ADMOB_INTERSTITIAL_ID=${ADMOB_INTERSTITIAL_ID_DEBUG}" >> ./lingshot-keys.properties
 
       - name: Build the app
-        run: ./gradlew clean build
+        run: ./gradlew check
 
   quality:
     runs-on: ubuntu-latest
