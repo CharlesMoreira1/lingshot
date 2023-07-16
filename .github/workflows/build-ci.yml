@@ -28,13 +28,13 @@ jobs:
           ADMOB_INTERSTITIAL_ID_RELEASE: ${{ secrets.ADMOB_INTERSTITIAL_ID_RELEASE }}
           ADMOB_INTERSTITIAL_ID_DEBUG: ${{ secrets.ADMOB_INTERSTITIAL_ID_DEBUG }}
         run: |
-          echo "CHAT_GPT_KEY_RELEASE" | base64 -d > lingshot-keys.properties
-          echo "CHAT_GPT_KEY_DEBUG" | base64 -d > lingshot-keys.properties
-          echo "GOOGLE_AUTH_ID" | base64 -d > lingshot-keys.properties
-          echo "ADMOB_APP_ID_RELEASE" | base64 -d > lingshot-keys.properties
-          echo "ADMOB_APP_ID_DEBUG" | base64 -d > lingshot-keys.properties
-          echo "ADMOB_INTERSTITIAL_ID_RELEASE" | base64 -d > lingshot-keys.properties
-          echo "ADMOB_INTERSTITIAL_ID_DEBUG" | base64 -d > lingshot-keys.properties
+          echo "$CHAT_GPT_KEY_RELEASE" | base64 -d > lingshot-keys.properties
+          echo "$CHAT_GPT_KEY_DEBUG" | base64 -d > lingshot-keys.properties
+          echo "$GOOGLE_AUTH_ID" | base64 -d > lingshot-keys.properties
+          echo "$ADMOB_APP_ID_RELEASE" | base64 -d > lingshot-keys.properties
+          echo "$ADMOB_APP_ID_DEBUG" | base64 -d > lingshot-keys.properties
+          echo "$ADMOB_INTERSTITIAL_ID_RELEASE" | base64 -d > lingshot-keys.properties
+          echo "$ADMOB_INTERSTITIAL_ID_DEBUG" | base64 -d > lingshot-keys.properties
 
       - name: Build the app
         run: ./gradlew clean build
