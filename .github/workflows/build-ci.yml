@@ -23,12 +23,12 @@ jobs:
           CHAT_GPT_KEY_DEBUG: ${{ secrets.CHAT_GPT_KEY_DEBUG }}
           GOOGLE_AUTH_ID: ${{ secrets.GOOGLE_AUTH_ID }}
           ADMOB_APP_ID_DEBUG: ${{ secrets.ADMOB_APP_ID_DEBUG }}
-          KEY_NEW: ${{ secrets.KEY_NEW }}
+          ADMOB_INTERSTITIAL_ID_DEBUG: ${{ secrets.ADMOB_INTERSTITIAL_ID_DEBUG }}
         run: |
           echo "CHAT_GPT_KEY=${CHAT_GPT_KEY_DEBUG}" > ./lingshot-keys.properties
           echo "GOOGLE_AUTH_ID=${GOOGLE_AUTH_ID}" >> ./lingshot-keys.properties
           echo "ADMOB_APP_ID=${ADMOB_APP_ID_DEBUG}" >> ./lingshot-keys.properties
-          echo "ADMOB_INTERSTITIAL_ID=${KEY_NEW}" >> ./lingshot-keys.properties
+          echo "ADMOB_INTERSTITIAL_ID=${ADMOB_INTERSTITIAL_ID_DEBUG}" >> ./lingshot-keys.properties
 
       - name: Build the app
         run: ./gradlew clean build

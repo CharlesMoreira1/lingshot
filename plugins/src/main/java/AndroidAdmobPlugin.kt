@@ -10,6 +10,9 @@ import org.gradle.kotlin.dsl.getByType
 class AndroidAdmobPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         with(project) {
+            pluginManager.apply {
+                apply("kotlinx-serialization")
+            }
             val extension = extensions.getByType<LibraryExtension>()
 
             extension.apply {
