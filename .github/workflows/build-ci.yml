@@ -40,6 +40,18 @@ jobs:
       - name: Setup checkout
         uses: actions/checkout@v3
 
+      - name: Access keys
+        env:
+          CHAT_GPT_KEY_DEBUG: $
+          GOOGLE_AUTH_ID: $
+          ADMOB_APP_ID_DEBUG: $
+          ADMOB_INTERSTITIAL_ID_DEBUG: $
+        run: |
+          echo CHAT_GPT_KEY=\"CHAT_GPT_KEY_DEBUG\" > ./lingshot-keys.properties
+          echo GOOGLE_AUTH_ID=\"GOOGLE_AUTH_ID\" > ./lingshot-keys.properties
+          echo ADMOB_APP_ID=\"ADMOB_APP_ID_DEBUG\" > ./lingshot-keys.properties
+          echo ADMOB_INTERSTITIAL_ID=\"ADMOB_INTERSTITIAL_ID_DEBUG\" > ./lingshot-keys.properties
+
       - name: Check code formatting
         run: ./gradlew ktlintCheck
 
