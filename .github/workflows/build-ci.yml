@@ -11,17 +11,14 @@ concurrency:
 
 jobs:
 
-  secretKey:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Setup checkout
         uses: actions/checkout@v3
 
-      - name: Create lingshot-keys.properties
-        run: touch lingshot-keys.properties
-
-      - name: Add secret keys to lingshot-keys.properties
+      - name: Decode secrets.properties file
         env:
           CHAT_GPT_KEY_RELEASE: ${{ secrets.CHAT_GPT_KEY_RELEASE }}
           CHAT_GPT_KEY_DEBUG: ${{ secrets.CHAT_GPT_KEY_DEBUG }}
@@ -31,21 +28,13 @@ jobs:
           ADMOB_INTERSTITIAL_ID_RELEASE: ${{ secrets.ADMOB_INTERSTITIAL_ID_RELEASE }}
           ADMOB_INTERSTITIAL_ID_DEBUG: ${{ secrets.ADMOB_INTERSTITIAL_ID_DEBUG }}
         run: |
-          echo "CHAT_GPT_KEY_RELEASE=${CHAT_GPT_KEY_RELEASE}" >> lingshot-keys.properties
-          echo "CHAT_GPT_KEY_DEBUG=${CHAT_GPT_KEY_DEBUG}" >> lingshot-keys.properties
-          echo "GOOGLE_AUTH_ID=${GOOGLE_AUTH_ID}" >> lingshot-keys.properties
-          echo "ADMOB_APP_ID_RELEASE=${ADMOB_APP_ID_RELEASE}" >> lingshot-keys.properties
-          echo "ADMOB_APP_ID_DEBUG=${ADMOB_APP_ID_DEBUG}" >> lingshot-keys.properties
-          echo "ADMOB_INTERSTITIAL_ID_RELEASE=${ADMOB_INTERSTITIAL_ID_RELEASE}" >> lingshot-keys.properties
-          echo "ADMOB_INTERSTITIAL_ID_DEBUG=${ADMOB_INTERSTITIAL_ID_DEBUG}" >> lingshot-keys.properties
-
-  build:
-    runs-on: ubuntu-latest
-
-    needs: [secretKey]
-    steps:
-      - name: Setup checkout
-        uses: actions/checkout@v3
+          echo "CHAT_GPT_KEY_RELEASE" | base64 -d > lingshot-keys.properties
+          echo "CHAT_GPT_KEY_DEBUG" | base64 -d > lingshot-keys.properties
+          echo "GOOGLE_AUTH_ID" | base64 -d > lingshot-keys.properties
+          echo "ADMOB_APP_ID_RELEASE" | base64 -d > lingshot-keys.properties
+          echo "ADMOB_APP_ID_DEBUG" | base64 -d > lingshot-keys.properties
+          echo "ADMOB_INTERSTITIAL_ID_RELEASE" | base64 -d > lingshot-keys.properties
+          echo "ADMOB_INTERSTITIAL_ID_DEBUG" | base64 -d > lingshot-keys.properties
 
       - name: Build the app
         run: ./gradlew clean build
@@ -53,7 +42,6 @@ jobs:
   quality:
     runs-on: ubuntu-latest
 
-    needs: [secretKey]
     steps:
       - name: Setup checkout
         uses: actions/checkout@v3
