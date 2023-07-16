@@ -17,7 +17,7 @@ jobs:
       - name: Setup checkout
         uses: actions/checkout@v3
 
-      - name: Build the app
+      - name: Build the app with secret keys
         env:
           CHAT_GPT_KEY_RELEASE: ${{ secrets.CHAT_GPT_KEY_RELEASE }}
           CHAT_GPT_KEY_DEBUG: ${{ secrets.CHAT_GPT_KEY_DEBUG }}
