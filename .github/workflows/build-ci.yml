@@ -120,7 +120,6 @@ jobs:
     name: calibreapp/image-actions
     runs-on: ubuntu-latest
 
-    needs: [testSnapshot]
     steps:
       - name: Setup checkout
         uses: actions/checkout@v3
@@ -132,7 +131,7 @@ jobs:
           jpegQuality: "80"
           pngQuality: "80"
           webpQuality: "80"
-          ignorePaths: "node_modules/**, **/snapshots/**"
+          ignorePaths: "node_modules/**, snapshots/**"
 
   danger:
     runs-on: ubuntu-latest
