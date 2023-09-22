@@ -99,7 +99,7 @@ internal class HomeScreenSnapshotTest {
     private fun fakeUiStateSuccess() =
         HomeUiState(
             userDomain = UserDomain(
-                username = "UserTest",
+                username = "UserTest2",
                 profilePictureUrl = BASE_URL_COIL
             ),
             isPieChartGoalsVisible = true,
