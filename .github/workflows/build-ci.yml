@@ -131,7 +131,7 @@ jobs:
           jpegQuality: "80"
           pngQuality: "80"
           webpQuality: "80"
-          ignorePaths: "node_modules/**, snapshots/**"
+          ignorePaths: "node_modules/**, **/src/test/snapshots/**"
 
   danger:
     runs-on: ubuntu-latest
