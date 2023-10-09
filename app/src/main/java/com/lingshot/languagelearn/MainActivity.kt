@@ -41,6 +41,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+//Lingshot Legacy
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
