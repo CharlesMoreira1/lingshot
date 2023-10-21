@@ -35,7 +35,7 @@ datastore = "1.0.0"
 room = "2.5.2"
 timber = "5.0.1"
 chucker = "3.5.2"
-daggerHilt = "2.48"
+daggerHilt = "2.48.1"
 
 firebaseBom = "31.2.0"
 
