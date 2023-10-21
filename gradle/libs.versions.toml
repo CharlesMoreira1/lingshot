@@ -16,7 +16,7 @@ lifecycle = "2.6.1"
 
 composeCompiler = "1.5.0"
 composeBom = "2023.08.00"
-composeMaterial3 = "1.1.1"
+composeMaterial3 = "1.1.2"
 composeHiltNavigation = "1.0.0"
 accompanist = "0.32.0"
 accompanistNavigationAnimation = "0.31.3-beta"
