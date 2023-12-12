@@ -1,6 +1,6 @@
 [versions]
 gradlePlugin = "8.1.2"
-androidR8 = "8.2.24"
+androidR8 = "8.2.33"
 kotlin = "1.9.10"
 googleServices = "4.4.0"
 multidex = "2.0.1"
