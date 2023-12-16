@@ -12,7 +12,7 @@ coreKTX = "1.12.0"
 coreSplashScreen = "1.0.1"
 appCompat = "1.6.1"
 material = "1.10.0"
-activity = "1.8.1"
+activity = "1.8.2"
 lifecycle = "2.6.2"
 
 composeCompiler = "1.5.3"
