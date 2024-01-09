@@ -39,7 +39,7 @@ firebaseBom = "32.7.0"
 
 imageCropper = "4.5.0"
 coil = "2.4.0"
-balloon = "1.6.1"
+balloon = "1.6.4"
 lottie = "6.1.0"
 markdown = "0.3.6"
 toasty = "1.5.2"
