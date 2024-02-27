@@ -33,7 +33,7 @@ coroutines = "1.7.3"
 datastore = "1.0.0"
 timber = "5.0.1"
 chucker = "3.5.2"
-daggerHilt = "2.48.1"
+daggerHilt = "2.51"
 
 firebaseBom = "32.7.0"
 
